@@ -40,7 +40,10 @@ module.exports = {
                 return newUser; 
             }catch(err){
                 if(err.name === 'SequelizeUniqueConstraintError'){
-                     err.errors.forEach(e => {errors[e.path] = e.message}); 
+                     err.errors.forEach(e => {errors[e.path] = `${e.path} is already taken`}); 
+                } 
+                else if(err.name === 'SequelizeValidationError'){
+                    err.errors.forEach(e => errors[e.path] = e.message); 
                 }
                 throw new UserInputError('Bad Input', {errors}); 
             }
